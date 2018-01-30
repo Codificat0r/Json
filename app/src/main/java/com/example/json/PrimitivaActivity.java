@@ -63,7 +63,10 @@ public class PrimitivaActivity extends AppCompatActivity implements View.OnClick
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(PrimitivaActivity.this, "ERROR: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                        if (error != null)
+                            Toast.makeText(PrimitivaActivity.this, "ERROR: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                        else
+                            Toast.makeText(PrimitivaActivity.this, "ERROR: No hay conexión al servidor", Toast.LENGTH_LONG).show();
                     }
                 });
 

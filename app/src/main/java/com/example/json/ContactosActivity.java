@@ -12,17 +12,20 @@ import android.widget.Toast;
 
 import com.example.json.network.RestClient;
 import com.example.json.pojo.Contacto;
+import com.example.json.utils.Analisis;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
 public class ContactosActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
-    //public static final String WEB = "http://192.168.1.20/acceso/contactos.json";
-    public static final String WEB = "https://www.portadaalta.mobi/acceso/contactos.json";
+    //public static final String WEB = "http://192.168.3.57/acceso/contactos.json";
+    public static final String WEB = "https://portadaalta.mobi/acceso/contactos.json";
     Button boton;
     ListView lista;
     ArrayList<Contacto> contactos;
@@ -52,20 +55,47 @@ public class ContactosActivity extends AppCompatActivity implements View.OnClick
             public void onStart() {
                 super.onStart();
                 progreso.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                progreso.setMessage("Conectando . . .");
+                progreso.setMessage("Conectando a . . ." + "\n" + WEB);
                 progreso.setCancelable(true);
                 progreso.show();
             }
 
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                super.onSuccess(statusCode, headers, response);
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
 
+                progreso.dismiss();
+                Toast.makeText(ContactosActivity.this, statusCode + "\n" + "No se ha podido obtener la lista de contactos: " + throwable.getMessage(), Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
+
+                progreso.dismiss();
+                Toast.makeText(ContactosActivity.this, statusCode + "\n" + "No se ha podido obtener la lista de contactos: " + throwable.getMessage(), Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                progreso.dismiss();
+
+                try {
+                    contactos = Analisis.analizarContactos(response);
+                    mostrar();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+
+                progreso.dismiss();
+                Toast.makeText(ContactosActivity.this, statusCode + "\n" + "No se ha podido obtener la lista de contactos: " + throwable.getMessage(), Toast.LENGTH_LONG).show();
+
             }
         });
     }
