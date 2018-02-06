@@ -52,4 +52,9 @@ public class ContactoGSON {
     public void setPhone(TelefonoGSON phone) {
         this.phone = phone;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

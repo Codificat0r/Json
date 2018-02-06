@@ -13,7 +13,7 @@ import java.util.List;
 public class ContactosGSON {
     @SerializedName("contacts")
     @Expose
-    private List<ContactoGSON> contacts = null;
+    private List<ContactoGSON> contacts;
 
     public List<ContactoGSON> getContacts() {
         return contacts;
