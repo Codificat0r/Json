@@ -1,6 +1,8 @@
 package com.example.json.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,6 +52,11 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.RepoHolder> {
         holder.txvDescripcion.setText(tmp.getDescription());
         holder.txvCreacion.setText(tmp.getCreatedAt());
 
+        if ((position % 2) == 0)
+            holder.crdView.setBackgroundColor(Color.LTGRAY);
+        else
+            holder.crdView.setBackgroundColor(Color.WHITE);
+
         //Informamos a quien quiera escuchar que se ha hecho un click o un long click sobre una de las vistas.
         holder.vista.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,6 +83,7 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.RepoHolder> {
         private TextView txvNombre;
         private TextView txvDescripcion;
         private TextView txvCreacion;
+        private CardView crdView;
         private View vista;
 
         public RepoHolder(View v) {
@@ -83,6 +91,7 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.RepoHolder> {
             txvNombre = v.findViewById(R.id.txvNombre);
             txvDescripcion = v.findViewById(R.id.txvDescripcion);
             txvCreacion = v.findViewById(R.id.txvCreacion);
+            crdView = v.findViewById(R.id.crdView);
             vista = v;
         }
     }
